@@ -20,10 +20,10 @@ const App = () => {
 
           console.log(
             "Connected with PublicKey:",
-            response.publickey.toString()
+            response.publicKey.toString()
           );
 
-          setWalletAddress(response.publickey.toString());
+          setWalletAddress(response.publicKey.toString());
         }
       } else {
         alert("Solana Object not Found! Get a Phantom Wallet");
@@ -33,7 +33,19 @@ const App = () => {
     }
   };
 
-  const connectWallet = async () => {};
+  const connectWallet = async () => {
+    const { solana } = window;
+    if (solana) {
+      const response = await solana.connect();
+
+      console.log(
+        "Connected with public key:- ",
+        response.publicKey.toString()
+      );
+
+      setWalletAddress(response.publicKey.toString());
+    }
+  };
 
   const renderNotConnectedContainer = () => {
     return (
