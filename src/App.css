@@ -42,7 +42,8 @@
 .cta-button {
   height: 45px;
   border: 0;
-  width: auto;
+  width: 300px;
+  margin: 0px auto;
   padding-left: 40px;
   padding-right: 40px;
   border-radius: 10px;
@@ -50,6 +51,7 @@
   font-size: 16px;
   font-weight: bold;
   color: white;
+  cursor: pointer;
 }
 
 .connect-wallet-button {
@@ -111,7 +113,7 @@
   object-fit: cover;
 }
 
-.connected-container input[type='text'] {
+.connected-container input[type="text"] {
   display: inline-block;
   color: white;
   padding: 10px;

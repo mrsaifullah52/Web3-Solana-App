@@ -1,12 +1,14 @@
 import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
+  const [walletAddress, setWalletAddress] = useState(null);
+
   const checkifWalletConnected = async () => {
     try {
       const { solana } = window;
@@ -20,6 +22,8 @@ const App = () => {
             "Connected with PublicKey:",
             response.publickey.toString()
           );
+
+          setWalletAddress(response.publickey.toString());
         }
       } else {
         alert("Solana Object not Found! Get a Phantom Wallet");
@@ -27,6 +31,19 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const connectWallet = async () => {};
+
+  const renderNotConnectedContainer = () => {
+    return (
+      <button
+        className="cta-button connect-wallet-button"
+        onClick={connectWallet}
+      >
+        Connect Phantom Wallet!
+      </button>
+    );
   };
 
   useEffect(() => {
@@ -48,6 +65,9 @@ const App = () => {
             View your GIF collection in the metaverse ✨
           </p>
         </div>
+
+        {!walletAddress && renderNotConnectedContainer()}
+
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
           <a
