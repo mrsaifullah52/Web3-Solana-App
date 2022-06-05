@@ -6,8 +6,17 @@ import { useEffect, useState } from "react";
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
+const TEST_GIFS = [
+  "https://i.giphy.com/media/eIG0HfouRQJQr1wBzz/giphy.webp",
+  "https://media3.giphy.com/media/L71a8LW2UrKwPaWNYM/giphy.gif?cid=ecf05e47rr9qizx2msjucl1xyvuu47d7kf25tqt2lvo024uo&rid=giphy.gif&ct=g",
+  "https://media4.giphy.com/media/AeFmQjHMtEySooOc8K/giphy.gif?cid=ecf05e47qdzhdma2y3ugn32lkgi972z9mpfzocjj6z1ro4ec&rid=giphy.gif&ct=g",
+  "https://i.giphy.com/media/PAqjdPkJLDsmBRSYUp/giphy.webp",
+];
+
 const App = () => {
+  const [inputValue, setInputValue] = useState("");
   const [walletAddress, setWalletAddress] = useState(null);
+  const [gifList, setGifList] = useState([]);
 
   const checkifWalletConnected = async () => {
     try {
@@ -47,6 +56,14 @@ const App = () => {
     }
   };
 
+  const sendGif = async () => {
+    if (inputValue.length > 0) {
+      console.log("Gif Link:-", inputValue);
+    } else {
+      alert("Empty Input, try again.");
+    }
+  };
+
   const renderNotConnectedContainer = () => {
     return (
       <button
@@ -55,6 +72,35 @@ const App = () => {
       >
         Connect Phantom Wallet!
       </button>
+    );
+  };
+
+  const renderConnectedContainer = () => {
+    return (
+      <div className="connected-container">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            sendGif();
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Enter Gif Link!"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button className="cta-button submit-gif-button">Submit</button>
+        </form>
+
+        <div className="gif-grid">
+          {gifList.map((Gif) => (
+            <div className="gif-item" key={Gif}>
+              <img src={Gif} alt={Gif} />
+            </div>
+          ))}
+        </div>
+      </div>
     );
   };
 
@@ -68,17 +114,26 @@ const App = () => {
     return () => window.removeEventListener("load", onLoad);
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      if (walletAddress) {
+        setGifList(TEST_GIFS);
+      }
+    })();
+  }, [walletAddress]);
+
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header">🖼 GIF Portal</p>
+          <p className="header">Flower GIF</p>
           <p className="sub-text">
-            View your GIF collection in the metaverse ✨
+            View your Flower GIF collection in the metaverse ✨
           </p>
         </div>
 
         {!walletAddress && renderNotConnectedContainer()}
+        {walletAddress && renderConnectedContainer()}
 
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
