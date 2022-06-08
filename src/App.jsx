@@ -59,6 +59,9 @@ const App = () => {
   const sendGif = async () => {
     if (inputValue.length > 0) {
       console.log("Gif Link:-", inputValue);
+
+      setGifList([...gifList, inputValue]);
+      setInputValue("");
     } else {
       alert("Empty Input, try again.");
     }
