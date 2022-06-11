@@ -2,6 +2,9 @@ import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 
+// Solana Program Information
+import idl from "./idl.json";
+
 // Constants
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
