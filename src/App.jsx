@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 // Solana Program Information
 import idl from "./idl.json";
 
+// solana web3 package
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
+// anchor package
+import { Program, Provider, web3 } from "@project-serum/anchor";
+
 // Constants
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
