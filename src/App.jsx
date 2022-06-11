@@ -1,3 +1,4 @@
+import kp from "./keypair.json";
 import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -15,7 +16,11 @@ import {
 } from "@project-serum/anchor";
 
 const { SystemProgram, Keypair } = web3;
-let baseAccount = Keypair.generate();
+// keypair
+const arr = Object.values(kp._keypair.secretKey);
+const secret = new Uint8Array(arr);
+const baseAccount = web3.Keypair.fromSecretKey(secret);
+
 const programId = new PublicKey(idl.metadata.address);
 const network = clusterApiUrl("devnet");
 const opts = {
@@ -111,13 +116,36 @@ const App = () => {
   };
 
   const sendGif = async () => {
-    if (inputValue.length > 0) {
-      console.log("Gif Link:-", inputValue);
+    // if (inputValue.length > 0) {
+    //   console.log("Gif Link:-", inputValue);
 
-      setGifList([...gifList, inputValue]);
-      setInputValue("");
-    } else {
-      alert("Empty Input, try again.");
+    //
+    //   setInputValue("");
+    // } else {
+    //   alert("Empty Input, try again.");
+    // }
+
+    if (inputValue == 0) {
+      alert("No Gif Link Given!");
+      return;
+    }
+    // setGifList([...gifList, inputValue]);
+    // setInputValue("");
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programId, provider);
+  
+      await program.rpc.addGif(inputValue, {
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+        },
+      });
+      console.log("GIF successfully sent to program", inputValue)
+  
+      await getGifList();
+    } catch (error) {
+      console.log("Failed to Send GIF sendGif:-", error);
     }
   };
 
@@ -133,6 +161,7 @@ const App = () => {
   };
 
   const renderConnectedContainer = () => {
+    console.log("gifList", gifList);
     if (gifList === null) {
       return (
         <div className="connected-container">
@@ -184,7 +213,10 @@ const App = () => {
       );
 
       console.log("Got the Account:-", account);
+      const gifs = await account.gifList;
+      setGifList(gifs);
     } catch (error) {
+      setGifList(null);
       console.log("Error in getGifList:-", error);
     }
   };
