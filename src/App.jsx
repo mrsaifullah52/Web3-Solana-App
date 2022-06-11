@@ -133,32 +133,45 @@ const App = () => {
   };
 
   const renderConnectedContainer = () => {
-    return (
-      <div className="connected-container">
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            sendGif();
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Enter Gif Link!"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button className="cta-button submit-gif-button">Submit</button>
-        </form>
-
-        <div className="gif-grid">
-          {gifList.map((Gif) => (
-            <div className="gif-item" key={Gif}>
-              <img src={Gif} alt={Gif} />
-            </div>
-          ))}
+    if (gifList === null) {
+      return (
+        <div className="connected-container">
+          <button
+            className="cta-button submit-gif-button"
+            onClick={createGifAccount}
+          >
+            Do One-Time initialization for GIF Program Account
+          </button>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="connected-container">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              sendGif();
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Enter Gif Link!"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button className="cta-button submit-gif-button">Submit</button>
+          </form>
+
+          <div className="gif-grid">
+            {gifList.map((item, index) => (
+              <div className="gif-item" key={index}>
+                <img src={item.gifLink} alt="gif" />
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
   };
 
   // getting data from solana blockchain
