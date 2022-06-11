@@ -28,7 +28,7 @@ const opts = {
 };
 
 // Constants
-const TWITTER_HANDLE = "_buildspace";
+const TWITTER_HANDLE = "@mr_saifullah_52";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const TEST_GIFS = [
@@ -260,7 +260,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >{`Develop By @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
