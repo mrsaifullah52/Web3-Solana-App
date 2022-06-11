@@ -8,7 +8,15 @@ import idl from "./idl.json";
 // solana web3 package
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 // anchor package
-import { Program, Provider, web3 } from "@project-serum/anchor";
+import { Program, AnchorProvider as Provider, web3 } from "@project-serum/anchor";
+
+import { SystemProgram, Keypair } from "@solana/web3.js";
+let baseAccount = Keypair.generate();
+const programId = new PublicKey(idl.metadata.address);
+const network = clusterApiUrl("devnet");
+const opts = {
+  preflightCommitment: "processed",
+};
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
@@ -25,6 +33,17 @@ const App = () => {
   const [inputValue, setInputValue] = useState("");
   const [walletAddress, setWalletAddress] = useState(null);
   const [gifList, setGifList] = useState([]);
+
+  // getting provider
+  const getProvider = () => {
+    const connection = new Connection(network, opts.preflightCommitment);
+    const provider = new Provider(
+      connection,
+      window.solana,
+      opts.preflightCommitment
+    );
+    return provider;
+  };
 
   const checkifWalletConnected = async () => {
     try {
