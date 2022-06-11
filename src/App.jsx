@@ -49,6 +49,29 @@ const App = () => {
     return provider;
   };
 
+  const createGifAccount = async () => {
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programId, provider);
+      console.log("ping");
+      await program.rpc.startStuffOff({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount],
+      });
+      console.log(
+        "Created new BaseAccount with address",
+        baseAccount.publicKey.toString()
+      );
+      await getGifList();
+    } catch (error) {
+      console.log("Error in createGifAccount:-", error);
+    }
+  };
+
   const checkifWalletConnected = async () => {
     try {
       const { solana } = window;
@@ -143,7 +166,9 @@ const App = () => {
     try {
       const provider = getProvider();
       const program = new Program(idl, programId, provider);
-      const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+      const account = await program.account.baseAccount.fetch(
+        baseAccount.publicKey
+      );
 
       console.log("Got the Account:-", account);
     } catch (error) {
