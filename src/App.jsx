@@ -8,9 +8,13 @@ import idl from "./idl.json";
 // solana web3 package
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 // anchor package
-import { Program, AnchorProvider as Provider, web3 } from "@project-serum/anchor";
+import {
+  Program,
+  AnchorProvider as Provider,
+  web3,
+} from "@project-serum/anchor";
 
-import { SystemProgram, Keypair } from "@solana/web3.js";
+const { SystemProgram, Keypair } = web3;
 let baseAccount = Keypair.generate();
 const programId = new PublicKey(idl.metadata.address);
 const network = clusterApiUrl("devnet");
@@ -134,6 +138,19 @@ const App = () => {
     );
   };
 
+  // getting data from solana blockchain
+  const getGifList = async () => {
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programId, provider);
+      const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+
+      console.log("Got the Account:-", account);
+    } catch (error) {
+      console.log("Error in getGifList:-", error);
+    }
+  };
+
   useEffect(() => {
     const onLoad = async () => {
       await checkifWalletConnected();
@@ -147,7 +164,8 @@ const App = () => {
   useEffect(() => {
     (async () => {
       if (walletAddress) {
-        setGifList(TEST_GIFS);
+        // setGifList(TEST_GIFS);
+        getGifList();
       }
     })();
   }, [walletAddress]);
